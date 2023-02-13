@@ -32,6 +32,27 @@ Enter job start time, end time, and earnings
 1100
 1200
 300
+
+def job_scheduling(jobs):
+    # sort jobs by end time
+    jobs.sort(key=lambda x: x[1])
+    n = len(jobs)
+    dp = [0 for _ in range(n)]
+    dp[0] = jobs[0][2]
+
+    for i in range(1, n):
+        cur_earnings = jobs[i][2]
+        for j in range(i):
+            if jobs[j][1] <= jobs[i][0]:
+                cur_earnings = max(cur_earnings, dp[j] + jobs[i][2])
+        dp[i] = cur_earnings
+
+    return max(dp)
+
+jobs = [(900, 1030, 100), (1000, 1200, 500), (1100, 1200, 300)]
+result = job_scheduling(jobs)
+print(result) # output: 1
+
 Sample Output: 1
 The number of tasks and earnings available for others
 Task: 2
@@ -50,6 +71,19 @@ Enter job start time, end time, and earnings
 1130
 1500
 150
+
+def maxEarnings(earnings, start, end, n):
+    dp = [0 for i in range(n+1)]
+    for i in range(1, n+1):
+        dp[i] = max(dp[i-1], dp[i-1]+earnings[i]-earnings[start[i]]-earnings[end[i-1]])
+    return dp[n]
+
+earnings = [0, 250, 550, 150, 400]
+start = [0, 9, 9, 11, 0]
+end = [0, 10, 12, 15, 0]
+n = 3
+print("The maximum earnings are: ", maxEarnings(earnings, start, end, n))
+
 Sample Output: 2
 The number of tasks and earnings available for others
 Task: 2
@@ -68,6 +102,43 @@ Enter job start time, end time, and earnings
 1100
 1200
 100
+
+jobs = []
+
+num_jobs = int(input("Enter the number of Jobs: "))
+
+for i in range(num_jobs):
+    start_time, end_time, earnings = input(f"Enter job start time, end time, and earnings for job {i+1}: ").split()
+    jobs.append((int(start_time), int(end_time), int(earnings)))
+
+print("Number of Tasks:", num_jobs)
+
+for i, (start_time, end_time, earnings) in enumerate(jobs):
+    print(f"Task {i+1}:")
+    print(f"Start Time: {start_time}")
+    print(f"End Time: {end_time}")
+    print(f"Earnings: {earnings}")
+
+output :
+
+Enter the number of Jobs: 3
+Enter job start time, end time, and earnings for job 1: 0900 1030 100
+Enter job start time, end time, and earnings for job 2: 1000 1200 100
+Enter job start time, end time, and earnings for job 3: 1100 1200 100
+Number of Tasks: 3
+Task 1:
+Start Time: 900
+End Time: 1030
+Earnings: 100
+Task 2:
+Start Time: 1000
+End Time: 1200
+Earnings: 100
+Task 3:
+Start Time: 1100
+End Time: 1200
+Earnings: 100
+
 Sample Output: 3
 The number of tasks and earnings available for others
 Task: 1
